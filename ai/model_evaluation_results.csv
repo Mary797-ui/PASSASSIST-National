@@ -1,0 +1,5 @@
+Target,Model,MAE,RMSE,R_squared,Training_rows,Testing_rows,Split_method
+applications_received,Linear Regression,8.049194107349765,11.2324876286541,0.6490311358215503,3504,876,"Chronological date holdout; train before 2025-10-20, test from that date"
+applications_received,Random Forest,3.3693433837144044,5.527082388972779,0.9150215962149524,3504,876,"Chronological date holdout; train before 2025-10-20, test from that date"
+outstanding_backlog,Linear Regression,0.9234522110685967,1.077988910598855,-25.442992161975383,3504,876,"Chronological date holdout; train before 2025-10-20, test from that date"
+outstanding_backlog,Random Forest,0.047618169546642865,0.2111322228533856,-0.014357512435314579,3504,876,"Chronological date holdout; train before 2025-10-20, test from that date"

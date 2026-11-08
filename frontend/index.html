@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PASSASSIST National passport preparation demonstration for Lesotho." />
+  <title>PASSASSIST National</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="public-mode">
+
+  <div class="public-site" id="publicSite">
+    <header class="public-header">
+      <a class="public-brand" href="#" data-public-view="welcome" aria-label="PASSASSIST National home">
+        <img class="lesotho-crest" src="https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Lesotho.svg" alt="Coat of arms of Lesotho" onerror="this.style.display='none'">
+        <span><strong>PASSASSIST</strong><small>NATIONAL · LESOTHO</small></span>
+      </a>
+      <nav class="public-nav" aria-label="Public navigation">
+        <button type="button" data-scroll="welcome">Home</button>
+        <button type="button" data-scroll="about">About us</button>
+        <button type="button" data-scroll="services">Services</button>
+      </nav>
+      <div class="public-header-actions">
+        <button class="public-signin-link" type="button" data-public-view="signin">Sign in</button>
+        <button class="public-primary-btn" type="button" data-public-view="signup">Create account</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="public-view public-welcome active" id="public-welcome">
+        <div class="public-hero" id="welcome">
+          <div class="public-hero-copy">
+            <div class="public-eyebrow"><span class="public-live-dot"></span> A PROPOSED DIGITAL PUBLIC SERVICE</div>
+            <h1>Your passport journey,<br><em>made clearer.</em></h1>
+            <p>Prepare for your Lesotho passport application with helpful guidance, document checklists and passport office information — all in one place.</p>
+            <div class="public-hero-actions">
+              <button class="public-primary-btn large" type="button" data-public-view="signup">Create your account <span>→</span></button>
+              <button class="public-outline-btn large" type="button" data-public-view="signin">Sign in</button>
+            </div>
+            <div class="public-trust-note"><span>✓</span> Prepare before you travel to a passport office.</div>
+          </div>
+          <div class="public-hero-visual" aria-label="Decorative illustration of the Lesotho mountains">
+            <div class="public-visual-sun"></div>
+            <div class="public-visual-mountain mountain-back"></div>
+            <div class="public-visual-mountain mountain-front"></div>
+            <div class="public-visual-card"><span>PASSASSIST NATIONAL</span><strong>Plan ahead.<br>Arrive prepared.</strong><small>KINGDOM OF LESOTHO</small></div>
+          </div>
+        </div>
+
+        <div class="public-stat-strip">
+          <div><strong>One place</strong><span>for passport preparation</span></div>
+          <div><strong>Clear guidance</strong><span>before your office visit</span></div>
+          <div><strong>National vision</strong><span>for better service planning</span></div>
+        </div>
+
+        <section class="public-section" id="services">
+          <div class="public-section-heading">
+            <div class="public-eyebrow">HOW PASSASSIST CAN HELP</div>
+            <h2>Know what to do <em>before you go.</em></h2>
+            <p>Find preparation guidance for the steps involved in a passport application.</p>
+          </div>
+          <div class="public-feature-grid">
+            <article class="public-feature-card"><span class="public-feature-icon">▤</span><div class="public-eyebrow">01 · PREPARE</div><h3>Document checklist</h3><p>Review the documents associated with your age group and passport application type.</p></article>
+            <article class="public-feature-card"><span class="public-feature-icon">⌖</span><div class="public-eyebrow">02 · PLAN</div><h3>Find an office</h3><p>Explore passport office information and plan where to make your visit.</p></article>
+            <article class="public-feature-card"><span class="public-feature-icon">◷</span><div class="public-eyebrow">03 · FOLLOW</div><h3>Application journey</h3><p>Our proposed system is designed to support progress updates as authorised processes are connected.</p></article>
+          </div>
+        </section>
+
+        <section class="public-about-section" id="about">
+          <div class="public-about-art"><div class="about-art-circle">P</div><span>PUBLIC SERVICE · DIGITAL SUPPORT</span></div>
+          <div class="public-about-copy">
+            <div class="public-eyebrow">ABOUT PASSASSIST NATIONAL</div>
+            <h2>A simpler way to <em>get prepared.</em></h2>
+            <p>PASSASSIST National is a proposed digital platform designed to help Basotho citizens prepare for passport-related services before visiting a passport office.</p>
+            <p>It brings preparation guidance, document checklists and office information together. Its longer-term government dashboard vision is to help authorised officials understand application volumes, processing activity and passport-book inventory needs across regions.</p>
+            <div class="public-about-points"><span>✓ Citizen-focused guidance</span><span>✓ Better operational visibility</span><span>✓ Responsible use of digital technology</span></div>
+          </div>
+        </section>
+
+        <section class="public-cta">
+          <div><div class="public-eyebrow">START WITH THE RIGHT INFORMATION</div><h2>Make your next step <em>an informed one.</em></h2><p>Create an account to explore the citizen portal prototype.</p></div>
+          <button class="public-light-btn" type="button" data-public-view="signup">Create an account <span>→</span></button>
+        </section>
+      </section>
+
+      <section class="public-view public-auth-view" id="public-signin">
+        <div class="public-auth-wrap">
+          <button class="public-back-link" type="button" data-public-view="welcome">← Back to home</button>
+          <div class="public-auth-card">
+            <div class="public-auth-mark">P</div>
+            <div class="public-eyebrow">WELCOME BACK</div>
+            <h1>Sign in to <em>PASSASSIST.</em></h1>
+            <p class="public-auth-intro">Citizens and authorised passport office staff can sign in using their assigned accounts.</p>
+            <form id="prototypeSignIn" class="public-auth-form">
+              <label for="signinEmail">Email address</label>
+              <input id="signinEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+              <label for="signinPassword">Password</label>
+              <input id="signinPassword" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+              <button class="public-primary-btn auth-submit" type="submit">Sign in <span>→</span></button>
+            </form>
+            <div class="public-form-message" id="signinMessage" role="status" aria-live="polite"></div>
+            <p class="public-auth-switch">Don't have an account? <button type="button" data-public-view="signup">Create account</button></p>
+            <div class="public-prototype-note">Staff access is granted separately by an administrator. Never share your password. Use fictional test accounts in this coursework prototype.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="public-view public-auth-view" id="public-signup">
+        <div class="public-auth-wrap">
+          <button class="public-back-link" type="button" data-public-view="welcome">← Back to home</button>
+          <div class="public-auth-card signup-card">
+            <div class="public-auth-mark">P</div>
+            <div class="public-eyebrow">JOIN PASSASSIST NATIONAL</div>
+            <h1>Create your <em>account.</em></h1>
+            <p class="public-auth-intro">Set up your profile to explore the citizen portal.</p>
+            <form id="prototypeSignUp" class="public-auth-form">
+              <label for="signupName">Full name</label>
+              <input id="signupName" name="fullName" type="text" placeholder="Enter your full name" autocomplete="name" required>
+              <label for="signupEmail">Email address</label>
+              <input id="signupEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+              <label for="signupPhone">Phone number <span>(optional)</span></label>
+              <input id="signupPhone" name="phone" type="tel" placeholder="+266 ..." autocomplete="tel">
+              <label for="signupPassword">Create password</label>
+              <input id="signupPassword" name="password" type="password" placeholder="Create a password" autocomplete="new-password" minlength="8" required>
+              <button class="public-primary-btn auth-submit" type="submit">Create account <span>→</span></button>
+            </form>
+            <div class="public-form-message" id="signupMessage" role="status" aria-live="polite"></div>
+            <p class="public-auth-switch">Already registered? <button type="button" data-public-view="signin">Sign in</button></p>
+            <div class="public-prototype-note">Prototype screen only. Account creation and secure password storage will be implemented in Phase 2. Do not use a real password here.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="public-footer">
+      <div class="public-footer-main">
+        <div class="public-footer-brand"><a class="public-brand" href="#" data-public-view="welcome"><img class="lesotho-crest" src="https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Lesotho.svg" alt="Coat of arms of Lesotho" onerror="this.style.display='none'"><span><strong>PASSASSIST</strong><small>NATIONAL · LESOTHO</small></span></a><p>Helping citizens prepare for passport services and supporting a more informed approach to public service planning.</p></div>
+        <div><strong>Explore</strong><button type="button" data-scroll="welcome">Home</button><button type="button" data-scroll="about">About us</button><button type="button" data-scroll="services">Services</button></div>
+        <div><strong>Passport information</strong><a href="https://www.homeaffairs.gov.ls/passports/" target="_blank" rel="noreferrer">Ministry passport information ↗</a><span>Confirm official requirements and fees with the Ministry.</span></div>
+      </div>
+      <div class="public-footer-bottom"><span>© PASSASSIST National · Student project prototype</span><span>Not an official Government of Lesotho service.</span></div>
+    </footer>
+  </div>
+
+  <div class="app-shell" id="citizenDemoApp">
+    <aside class="sidebar">
+      <a class="brand" href="#home" aria-label="PASSASSIST home">
+        <img class="lesotho-crest sidebar-crest" src="https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Lesotho.svg" alt="Coat of arms of Lesotho" onerror="this.style.display='none'"><span><strong>PASSASSIST</strong><small>NATIONAL · LESOTHO</small></span>
+      </a>
+      <div class="side-label">CITIZEN PORTAL</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" data-page="home"><span>⌂</span> Overview</button>
+        <button class="nav-item" data-page="apply"><span>＋</span> Passport services</button>
+        <button class="nav-item" data-page="my-applications"><span>▣</span> My applications</button>
+        <button class="nav-item" data-page="checklist"><span>☷</span> Document checklist</button>
+        <button class="nav-item" data-page="offices"><span>⌖</span> Find an office</button>
+        <button class="nav-item" data-page="dashboard"><span>▥</span> National dashboard</button>
+        <button class="nav-item" data-page="security"><span>♙</span> Security centre</button>
+        <button class="nav-item" data-page="admin"><span>▣</span> Security administration</button>
+      </nav>
+      <div class="sidebar-bottom"><div class="help-card"><span class="help-icon">?</span><strong>Need assistance?</strong><p>Prepare before visiting a passport office.</p><a href="https://www.homeaffairs.gov.ls/passports/" target="_blank" rel="noreferrer">Official passport information ↗</a></div><div class="side-foot">DEMO ENVIRONMENT <span class="live-dot"></span></div></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><div><div class="eyebrow">KINGDOM OF LESOTHO <span> / </span> DIGITAL PUBLIC SERVICES</div><div class="top-title" id="topTitle">Overview</div></div><div class="top-actions"><span class="demo-pill">CITIZEN PORTAL</span><button class="public-signout-btn" id="logoutButton" type="button">Sign out</button><button class="profile-chip" aria-label="Demo profile"><span class="avatar">C</span><span>Citizen account</span><span class="chevron">⌄</span></button></div></header>
+      <div class="content">
+        <section class="page active" id="page-home">
+          <div class="welcome-row"><div><div class="eyebrow accent">YOUR PASSPORT JOURNEY, MADE CLEARER</div><h1>Good day. <em>Welcome.</em></h1><p class="lead">Get prepared before you visit a passport office. Know what to bring, where to go and what to expect.</p></div><div class="welcome-art"><div class="sun"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="art-caption">READY WHEN YOU ARE</div></div></div>
+          <div class="notice"><span class="notice-icon">i</span><div><strong>Before you begin</strong><p>This is a student demonstration. It is not connected to Ministry systems and cannot submit or track a real passport application.</p></div></div>
+          <div class="section-heading"><div><div class="eyebrow">GET STARTED</div><h2>What would you like to do?</h2></div><span class="muted small">Choose a service to continue</span></div>
+          <div class="service-grid"><button class="service-card" data-go="apply"><span class="service-icon navy">＋</span><span class="card-kicker">PASSPORT SERVICE 01</span><strong>Apply for a new passport</strong><p>Review the first-time application requirements and prepare your documents.</p><span class="card-link">Start preparation <b>→</b></span></button><button class="service-card" data-go="apply"><span class="service-icon gold">↻</span><span class="card-kicker">PASSPORT SERVICE 02</span><strong>Replace an existing passport</strong><p>See what is needed when your passport requires replacement.</p><span class="card-link">View requirements <b>→</b></span></button><button class="service-card" data-go="offices"><span class="service-icon teal">⌖</span><span class="card-kicker">PLAN YOUR VISIT</span><strong>Find a passport office</strong><p>Explore the district office directory and available contact details.</p><span class="card-link">Find an office <b>→</b></span></button></div>
+          <div class="bottom-grid"><div class="panel"><div class="panel-head"><div><div class="eyebrow">YOUR PREPARATION</div><h3>Three simple steps</h3></div><span class="step-count">01 — 03</span></div><div class="steps"><div class="step"><span>01</span><div><strong>Choose your application type</strong><p>New passport or replacement.</p></div><b>→</b></div><div class="step"><span>02</span><div><strong>Check your documents</strong><p>Use the checklist for your age and application.</p></div><b>→</b></div><div class="step"><span>03</span><div><strong>Plan your office visit</strong><p>Confirm details with the relevant office.</p></div><b>→</b></div></div></div><div class="panel quote-panel"><div class="eyebrow">PUBLIC SERVICE, MADE CLEARER</div><div class="quote-mark">“</div><h3>Arrive prepared.<br><em>Save a return trip.</em></h3><p>PASSASSIST helps citizens understand preparation requirements before travelling to an enrolment centre.</p><div class="quote-line"></div><span class="muted small">A proposed digital support service</span></div></div>
+        </section>
+        <section class="page" id="page-apply"><div class="page-intro"><div class="eyebrow accent">PASSPORT SERVICES</div><h1>Choose your <em>application.</em></h1><p class="lead">Select the service that matches your situation. This demonstration provides preparation guidance only.</p></div><div class="choice-grid"><button class="choice-card" data-kind="new"><span class="choice-number">01 / NEW</span><span class="choice-symbol">＋</span><h2>First-time passport</h2><p>For applicants who are applying for a passport for the first time.</p><span class="card-link">View checklist →</span></button><button class="choice-card" data-kind="replacement"><span class="choice-number">02 / REPLACEMENT</span><span class="choice-symbol">↻</span><h2>Replace a passport</h2><p>For applicants who already have or previously held a passport.</p><span class="card-link">View checklist →</span></button></div><div class="panel guidance"><div class="panel-head"><div><div class="eyebrow">IMPORTANT INFORMATION</div><h3>Before visiting an enrolment centre</h3></div><span class="info-badge">PLEASE NOTE</span></div><ul class="clean-list"><li>Applicants aged 16 and above must attend an enrolment centre in person.</li><li>Applicants below 16 must be accompanied by a parent or legal guardian.</li><li>Confirm current fees, requirements and operating arrangements with the Ministry before travelling.</li></ul><a class="text-link" href="https://www.homeaffairs.gov.ls/passports/" target="_blank" rel="noreferrer">Check official Ministry information ↗</a></div></section>
+
+        <section class="page" id="page-my-applications">
+          <div class="page-intro"><div class="eyebrow accent">COMPLETE CITIZEN JOURNEY</div><h1>Passport <em>application.</em></h1><p class="lead">Prepare your checklist, save a draft, review and submit your demonstration application, then follow its status through collection.</p></div>
+          <div class="notice"><span class="notice-icon">i</span><div><strong>Coursework prototype</strong><p>This system does not submit an official passport application. Ministry processing, payment, appointment and collection updates require authorised Home Affairs integration. Use fictional test details only.</p></div></div>
+          <div class="panel form-panel">
+            <div class="panel-head"><div><div class="eyebrow">APPLICATION WORKSPACE</div><h3 id="applicationFormHeading">Prepare a passport application</h3></div><span class="info-badge" id="draftModeLabel">NEW DRAFT</span></div>
+            <form id="applicationForm" class="public-auth-form">
+              <input id="editingApplicationId" type="hidden">
+              <div class="form-row">
+                <label for="recordType">Application type<select id="recordType" required><option value="new">New passport</option><option value="replacement">Replacement passport</option></select></label>
+                <label for="recordCategory">Applicant category<select id="recordCategory" required><option value="adult">Adult — 16 years and above</option><option value="minor">Minor — below 16 years</option></select></label>
+              </div>
+              <div class="form-row">
+                <label for="recordBook">Passport book type<select id="recordBook" required><option value="regular_32">Regular — 32 pages</option><option value="regular_64">Regular — 64 pages</option></select></label>
+                <label for="recordOffice">Preferred passport office<select id="recordOffice" required><option value="">Choose an office</option><option>Maseru</option><option>Berea</option><option>Leribe</option><option>Botha-Bothe</option><option>Mokhotlong</option><option>Thaba-Tseka</option><option>Qacha's Nek</option><option>Quthing</option><option>Mohale's Hoek</option><option>Mafeteng</option><option>Mount Moorosi (confirm availability)</option><option>Semonkong (confirm availability)</option></select></label>
+              </div>
+              <div class="form-row">
+                <label for="applicantTestName">Applicant name (fictional test name)<input id="applicantTestName" maxlength="120" required placeholder="e.g. Test Applicant"></label>
+                <label for="applicantTestDob">Date of birth<input id="applicantTestDob" type="date" required></label>
+              </div>
+              <label for="applicantContact">Contact detail for demonstration (optional)<input id="applicantContact" maxlength="80" placeholder="Use a fictional contact value"></label>
+              <div class="checklist-head"><div><div class="eyebrow">DOCUMENT READINESS</div><h3>Confirm each preparation item</h3></div><span class="progress-label" id="applicationChecklistProgress">0 items checked</span></div>
+              <div id="applicationChecklistItems" class="check-items"></div>
+              <div class="public-form-message" id="applicationMessage" role="status" aria-live="polite"></div>
+              <div class="form-row">
+                <button class="public-primary-btn" id="saveApplicationDraft" type="button">Save draft</button>
+                <button class="public-primary-btn auth-submit" id="submitApplication" type="button">Review & submit</button>
+              </div>
+              <button class="primary-btn" id="cancelApplicationEdit" type="button" hidden>Cancel editing</button>
+            </form>
+          </div>
+          <div class="panel table-panel"><div class="panel-head"><div><div class="eyebrow">YOUR PRIVATE RECORDS</div><h3>Application history & tracking</h3></div><button class="primary-btn" id="refreshApplications" type="button">Refresh</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Reference</th><th>Application</th><th>Office</th><th>Status</th><th>Last updated</th><th>Actions</th></tr></thead><tbody id="applicationsTable"><tr><td colspan="6">Sign in to load your records.</td></tr></tbody></table></div>
+            <p class="footnote">A citizen can edit a draft, but cannot approve an application or change an officer's processing status. Collection acknowledgement is available only after a record is marked ready for collection by an authorised process.</p>
+          </div>
+        </section>
+        <section class="page" id="page-checklist"><div class="page-intro"><div class="eyebrow accent">DOCUMENT PREPARATION</div><h1>Your document <em>checklist.</em></h1><p class="lead">Choose the applicant category and application type to view the relevant preparation list.</p></div><div class="panel form-panel"><div class="form-row"><label>Applicant category<select id="applicantAge"><option value="adult">Adult — 16 years and above</option><option value="minor">Child — below 16 years</option></select></label><label>Application type<select id="applicationType"><option value="new">First-time passport</option><option value="replacement">Passport replacement</option></select></label></div><div class="checklist-head"><div><div class="eyebrow">YOUR REQUIRED DOCUMENTS</div><h3 id="checkTitle">Adult first-time application</h3></div><span class="progress-label" id="progressLabel">0 of 2 ready</span></div><div class="progress-track"><div id="progressBar"></div></div><div id="checkItems" class="check-items"></div><div class="check-footer"><span class="muted small">Tick each item as you prepare it.</span><button class="primary-btn" id="resetChecks">Reset checklist ↺</button></div></div><div class="notice subtle"><span class="notice-icon">i</span><div><strong>Fees and official confirmation</strong><p>Previously recorded reference fees are M130 for a regular 32-page passport and M300 for a regular 64-page passport. Verify current fees and all requirements with the Ministry before making payment.</p><a class="text-link" href="https://www.homeaffairs.gov.ls/passports/" target="_blank" rel="noreferrer">Visit Ministry of Home Affairs ↗</a></div></div></section>
+        <section class="page" id="page-offices"><div class="page-intro"><div class="eyebrow accent">NATIONAL OFFICE DIRECTORY</div><h1>Find your <em>passport office.</em></h1><p class="lead">Browse the proposed directory of district offices. Confirm contact details before travelling.</p></div><div class="office-tools"><input id="officeSearch" type="search" placeholder="Search district or office..." aria-label="Search offices"><span class="muted small" id="officeCount">Loading offices...</span></div><div class="office-grid" id="officeGrid"></div><p class="footnote">Contact details are a draft directory and may change. Semonkong and Mount Moorosi contact details are not available in this demonstration.</p></section>
+        <section class="page" id="page-dashboard"><div class="page-intro"><div class="eyebrow accent">OPERATIONS & SERVICE DELIVERY</div><h1>National service <em>overview.</em></h1><p class="lead">A demonstration view of aggregated passport operations data across service locations.</p></div><div class="data-warning"><span>!</span><div><strong>SYNTHETIC DEMONSTRATION DATA</strong><p>These figures are generated for coursework. They are not official Ministry statistics and are not live operational records.</p></div></div><div class="metric-grid" id="metricGrid"><div class="metric-card"><span>Applications received</span><strong>—</strong><small>Loading data</small></div></div>
+<div class="panel forecast-panel">
+  <div class="panel-head">
+    <div>
+      <div class="eyebrow">ARTIFICIAL INTELLIGENCE</div>
+      <h3>Demand forecasting & analytics</h3>
+    </div>
+    <span class="info-badge">AI DEMONSTRATION</span>
+  </div>
+
+  <div class="forecast-grid" id="forecastSummary">
+    <div class="forecast-stat">Loading forecast...</div>
+  </div>
+
+  <div class="forecast-method">
+    <strong>Forecasting method</strong>
+    <p id="forecastMethod">Loading forecasting information...</p>
+  </div>
+
+  <div id="modelEvaluation"></div>
+
+  <p class="footnote">
+    These are experimental projections using synthetic demonstration
+    data. They are not official Ministry forecasts or operational decisions.
+  </p>
+</div>
+<div class="panel analytics-panel">
+  <div class="panel-head">
+    <div>
+      <div class="eyebrow">NATIONAL OPERATIONS REPORT</div>
+      <h3>Passport activity over time</h3>
+      <p class="muted small">Daily, monthly and yearly reporting</p>
+    </div>
+    <select id="analyticsPeriod" aria-label="Select reporting period">
+      <option value="monthly">Monthly</option>
+      <option value="daily">Daily</option>
+      <option value="yearly">Yearly</option>
+    </select>
+  </div>
+
+  <div class="metric-grid" id="analyticsMetrics">
+    <div class="metric-card">Loading analytics...</div>
+  </div>
+
+  <div class="panel-head">
+    <div>
+      <div class="eyebrow">APPLICATION TRENDS</div>
+      <h3 id="analyticsChartTitle">Monthly applications received</h3>
+    </div>
+  </div>
+  <div id="analyticsChart" class="analytics-chart">
+  Loading chart...
+</div>
+
+<div class="panel-head">
+  <div>
+    <div class="eyebrow">PASSPORT PRODUCTION & COLLECTION</div>
+    <h3>Printed vs collected passports</h3>
+  </div>
+</div>
+
+<div id="passportComparisonChart" class="analytics-chart">
+  Loading comparison...
+</div>
+  <div class="panel-head">
+    <div>
+      <div class="eyebrow">DETAILED REPORT</div>
+      <h3>Operations breakdown</h3>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Period</th>
+          <th>Received</th>
+          <th>Processed</th>
+          <th>Approved</th>
+          <th>Printed</th>
+          <th>Collected</th>
+        </tr>
+      </thead>
+      <tbody id="analyticsTable">
+        <tr><td colspan="6">Loading report...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="footnote">
+    Reports use synthetic demonstration data and are not official Ministry statistics.
+  </p>
+</div>
+<div class="panel table-panel"><div class="panel-head"><div><div class="eyebrow">SERVICE LOCATIONS</div><h3>Office performance summary</h3></div><span class="muted small">Aggregated demo records</span></div><div class="table-wrap"><table><thead><tr><th>District</th><th>Office</th><th>Applications received</th><th>Passports printed</th><th>Outstanding backlog</th></tr></thead><tbody id="officeTable"><tr><td colspan="5">Loading office data...</td></tr></tbody></table></div></div></section>
+        <section class="page" id="page-admin"><div class="page-intro"><div class="eyebrow accent">RESTRICTED ADMINISTRATION</div><h1>Security <em>administration.</em></h1><p class="lead">The administration workspace is embedded here so authorised staff can use one PASSASSIST application. The administrator sign-in and database permission checks remain active.</p></div><div class="data-warning"><span>!</span><div><strong>RESTRICTED ACCESS</strong><p>Only an account explicitly assigned as an active security administrator in Supabase can use the controls below. This embedded view does not grant permissions.</p></div></div><iframe title="PASSASSIST Security Administration" src="/admin" class="admin-embed" loading="lazy"></iframe></section>
+        <section class="page" id="page-security"><div class="page-intro"><div class="eyebrow accent">PROPOSED ADMINISTRATION MODULE</div><h1>Security & <em>access centre.</em></h1><p class="lead">A design preview of how authorised administrators could manage access and review system security.</p></div><div class="data-warning"><span>!</span><div><strong>DESIGN PREVIEW ONLY</strong><p>This page does not authenticate users or enforce permissions. Do not enter real passwords or personal information.</p></div></div><div class="security-grid"><div class="panel"><div class="eyebrow">ACCESS CONTROL</div><h3>Role-based permissions</h3><div class="role-row"><span class="role-icon">A</span><div><strong>System administrator</strong><p>Manage approved users, roles and system configuration.</p></div><span class="role-tag">PRIVILEGED</span></div><div class="role-row"><span class="role-icon">O</span><div><strong>Office officer</strong><p>Access only authorised office-level operational records.</p></div><span class="role-tag">LIMITED</span></div><div class="role-row"><span class="role-icon">R</span><div><strong>Reporting analyst</strong><p>View approved aggregated reports and trends.</p></div><span class="role-tag">READ ONLY</span></div></div><div class="panel"><div class="eyebrow">SECURITY PRINCIPLES</div><h3>Protection by design</h3><div class="security-point"><b>01</b><div><strong>Least privilege</strong><p>Give each user only the access needed for their duties.</p></div></div><div class="security-point"><b>02</b><div><strong>Audit trail</strong><p>Record important administrative and data-access events.</p></div></div><div class="security-point"><b>03</b><div><strong>Data protection</strong><p>Classify information and protect sensitive citizen records.</p></div></div></div></div></section>
+        <footer class="footer"><span>PASSASSIST NATIONAL <b>·</b> STUDENT DEMONSTRATION</span><span>Designed to support informed passport preparation</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <section id="officerPortal" class="officer-portal" aria-label="Passport office officer portal">
+    <header class="officer-topbar"><div class="officer-brand"><span class="officer-brand-mark">P</span><div><strong>PASSASSIST</strong><small>OFFICER WORKSPACE · LESOTHO</small></div></div><div class="officer-user"><span id="officerOfficeLabel">Assigned office</span><button type="button" id="officerSignOut" class="public-signout-btn">Sign out</button></div></header>
+    <main class="officer-content">
+      <div class="officer-heading"><div><div class="public-eyebrow">PASSPORT OFFICE OPERATIONS</div><h1>Application <em>processing.</em></h1><p>Review applications assigned to your office and record authorised processing decisions.</p></div><span class="officer-role-pill" id="officerRoleLabel">OFFICER</span></div>
+      <div class="data-warning"><span>!</span><div><strong>AUTHORISED DEMONSTRATION WORKSPACE</strong><p>Use fictional test records only. This prototype is not connected to Home Affairs production systems. Only authorised staff accounts assigned to an office can access this queue.</p></div></div>
+      <div class="officer-metrics" id="officerMetrics"><div class="metric-card"><span>Assigned office queue</span><strong>—</strong><small>Loading</small></div><div class="metric-card"><span>Submitted</span><strong>—</strong><small>Loading</small></div><div class="metric-card"><span>Under review</span><strong>—</strong><small>Loading</small></div><div class="metric-card"><span>Ready for collection</span><strong>—</strong><small>Loading</small></div></div>
+      <div class="panel officer-queue-panel"><div class="panel-head"><div><div class="eyebrow">OFFICE WORK QUEUE</div><h3>Applications requiring attention</h3></div><div class="officer-queue-actions"><select id="officerStatusFilter" aria-label="Filter applications"><option value="all">All active statuses</option><option value="submitted">Submitted</option><option value="under_review">Under review</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="printing">Printing</option><option value="ready_for_collection">Ready for collection</option></select><button type="button" class="primary-btn" id="refreshOfficerQueue">Refresh queue</button></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Reference</th><th>Applicant</th><th>Application</th><th>Book</th><th>Status</th><th>Submitted</th><th>Action</th></tr></thead><tbody id="officerQueueTable"><tr><td colspan="7">Loading office queue...</td></tr></tbody></table></div>
+      </div>
+      <div class="panel officer-process-panel" id="officerProcessPanel" hidden><div class="panel-head"><div><div class="eyebrow">PROCESSING RECORD</div><h3 id="officerSelectedHeading">Selected application</h3></div><button type="button" class="primary-btn" id="closeOfficerProcess">Close</button></div><div class="officer-record-summary" id="officerRecordSummary"></div><form id="officerProcessForm" class="officer-process-form"><label for="officerNextStatus">Next authorised status<select id="officerNextStatus" required></select></label><label for="officerProcessNote">Processing note (no sensitive details)<textarea id="officerProcessNote" maxlength="500" rows="3" placeholder="Brief factual note about this processing action"></textarea></label><div class="public-form-message" id="officerProcessMessage" role="status" aria-live="polite"></div><button type="submit" class="public-primary-btn">Save processing decision</button></form></div>
+      <p class="footnote">Role permissions are enforced by Supabase database functions and row-level security, not by hiding buttons in the browser. Officer actions are recorded in the application event history.</p>
+    </main>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/static/supabase-config.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
