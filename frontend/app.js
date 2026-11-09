@@ -252,7 +252,7 @@ loadOffices();loadDashboard();loadAnalytics();loadTechnologyInsights();
       password,
       options: {
         data: { full_name: fullName, phone },
-        emailRedirectTo: window.location.origin
+        emailRedirectTo: 'https://passassist-national.onrender.com/'
       }
     });
     button.disabled = false;
