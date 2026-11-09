@@ -1,4 +1,4 @@
-const titles={home:'Overview',apply:'Passport services','my-applications':'My applications',checklist:'Document checklist',offices:'Find an office',dashboard:'National dashboard',security:'Security centre',admin:'Security administration'};
+const titles={home:'Overview',apply:'Passport services','my-applications':'My applications',checklist:'Document checklist',offices:'Find an office',dashboard:'National dashboard'};
 const pages=[...document.querySelectorAll('.page')];
 function showPage(name){pages.forEach(p=>p.classList.toggle('active',p.id===`page-${name}`));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===name));document.getElementById('topTitle').textContent=titles[name]||'Overview';window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
@@ -9,118 +9,93 @@ function renderChecklist(){const age=document.getElementById('applicantAge').val
 function updateProgress(){const checks=[...document.querySelectorAll('[data-check]')];const done=checks.filter(x=>x.checked).length;document.getElementById('progressLabel').textContent=`${done} of ${checks.length} ready`;document.getElementById('progressBar').style.width=checks.length?`${done/checks.length*100}%`:'0%';}
 document.getElementById('applicantAge').addEventListener('change',renderChecklist);document.getElementById('applicationType').addEventListener('change',renderChecklist);document.getElementById('resetChecks').addEventListener('click',()=>{document.querySelectorAll('[data-check]').forEach(x=>x.checked=false);updateProgress();});renderChecklist();
 let officeRecords=[];
-function renderOffices(records){const host=document.getElementById('officeGrid');host.innerHTML='';records.forEach(o=>{const card=document.createElement('article');card.className='office-card';const phone=o.phone||'Contact number not available';card.innerHTML=`<div class="office-top"><span class="office-district">${escapeHtml(o.district||'LESOTHO')}</span><span class="office-pin">⌖</span></div><h3>${escapeHtml(o.office||'Passport office')}</h3><div class="office-phone">${escapeHtml(phone)}</div><div class="office-status">DEMO DIRECTORY · CONFIRM BEFORE VISITING</div>`;host.appendChild(card);});document.getElementById('officeCount').textContent=`${records.length} locations listed`;}
-function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-async function loadOffices(){try{const res=await fetch('/api/offices');if(!res.ok)throw new Error('Could not load offices');const data=await res.json();officeRecords=(data.offices||[]).map(o=>({...o,phone:''}));renderOffices(officeRecords);}catch(e){document.getElementById('officeGrid').innerHTML='<div class="panel">Office data could not be loaded. Check that the backend server is running.</div>';document.getElementById('officeCount').textContent='Unavailable';}}
-document.getElementById('officeSearch').addEventListener('input',e=>{const q=e.target.value.toLowerCase();renderOffices(officeRecords.filter(o=>`${o.district} ${o.office}`.toLowerCase().includes(q)));});
+function renderOffices(records) {
+    const host = document.getElementById('officeGrid');
+    host.innerHTML = '';
 
-async function loadDashboard() {
-  try {
-    const [overviewRes, officesRes] = await Promise.all([
-      fetch('/api/overview'),
-      fetch('/api/offices')
-    ]);
+    records.forEach(o => {
+        const card = document.createElement('article');
+        card.className = 'office-card';
 
-    if (!overviewRes.ok || !officesRes.ok) {
-      throw new Error('Dashboard API unavailable');
-    }
+        const phone = o.phone || 'Contact number not available';
+        const extraPhone = o.additional_phone
+            ? `<p><strong>${escapeHtml(o.additional_contact || 'Additional contact')}:</strong> ${escapeHtml(o.additional_phone)}</p>`
+            : '';
 
-    const overview = await overviewRes.json();
-    const offices = await officesRes.json();
+        const services = (o.services || [])
+            .map(service => `<li>${escapeHtml(service)}</li>`)
+            .join('');
 
-    const metrics = [
-      ['Applications received', overview.applications_received],
-      ['Applications processed', overview.applications_processed],
-      ['Passports printed', overview.passports_printed],
-      ['Passports collected', overview.passports_collected]
-    ];
-
-    document.getElementById('metricGrid').innerHTML =
-      metrics.map(m => `
-        <div class="metric-card">
-          <span>${escapeHtml(m[0])}</span>
-          <strong>${Number(m[1]).toLocaleString()}</strong>
-          <small>Synthetic demonstration data</small>
-        </div>
-      `).join('');
-
-    document.getElementById('officeTable').innerHTML =
-      (offices.offices || []).map(o => `
-        <tr>
-          <td>${escapeHtml(o.district)}</td>
-          <td>${escapeHtml(o.office)}</td>
-          <td>${Number(o.applications_received).toLocaleString()}</td>
-          <td>${Number(o.passports_printed).toLocaleString()}</td>
-          <td>${Number(o.outstanding_backlog).toLocaleString()}</td>
-        </tr>
-      `).join('');
-
-    // Load the AI forecasting demonstration separately.
-    try {
-      const response = await fetch('/api/forecast');
-      if (!response.ok) throw new Error('Forecast unavailable');
-
-      const forecast = await response.json();
-
-      document.getElementById('forecastSummary').innerHTML = `
-        <div class="forecast-stat">
-          <span>Projected applications (next 30 days)</span>
-          <strong>${Number(forecast.forecast_next_30_days_received).toLocaleString()}</strong>
-        </div>
-        <div class="forecast-stat">
-          <span>Average daily outstanding backlog</span>
-          <strong>${Number(forecast.forecast_daily_backlog_average).toLocaleString()}</strong>
-        </div>
-      `;
-
-      document.getElementById('forecastMethod').textContent =
-        forecast.method || 'Forecasting method not specified';
-
-      const results = forecast.model_evaluation || [];
-      const evaluation = document.getElementById('modelEvaluation');
-
-      if (results.length) {
-        const columns = Object.keys(results[0]);
-
-        evaluation.innerHTML = `
-          <h4>Saved model evaluation results</h4>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>${columns.map(c => `<th>${escapeHtml(c)}</th>`).join('')}</tr>
-              </thead>
-              <tbody>
-                ${results.map(row => `
-                  <tr>${columns.map(c =>
-                    `<td>${escapeHtml(row[c] ?? '—')}</td>`
-                  ).join('')}</tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
+        card.innerHTML = `
+            <div class="office-top">
+                <span class="office-district">${escapeHtml(o.district || 'LESOTHO')}</span>
+                <span class="office-pin">⌖</span>
+            </div>
+            <h3>${escapeHtml(o.office || 'Passport office')}</h3>
+            <p><strong>Telephone:</strong> ${escapeHtml(phone)}</p>
+            ${extraPhone}
+            <p><strong>Address:</strong> ${escapeHtml(o.address || 'To be verified')}</p>
+            <p><strong>Opening hours:</strong> ${escapeHtml(o.opening_hours || 'To be confirmed')}</p>
+            <details>
+                <summary>View office services</summary>
+                <ul>${services}</ul>
+            </details>
+            <div class="office-status">VERIFY ADDRESS AND HOURS BEFORE VISITING</div>
         `;
-      } else {
-        evaluation.textContent =
-          'No saved model evaluation results are available.';
-      }
 
-    } catch (forecastError) {
-      document.getElementById('forecastSummary').textContent =
-        'Forecast data is currently unavailable.';
-      document.getElementById('forecastMethod').textContent =
-        forecastError.message;
-    }
+        host.appendChild(card);
+    });
 
-  } catch (error) {
-    document.getElementById('metricGrid').innerHTML =
-      '<div class="panel">Could not load demonstration metrics. Check the backend server.</div>';
-
-    document.getElementById('officeTable').innerHTML =
-      '<tr><td colspan="5">Office data unavailable.</td></tr>';
-  }
+    document.getElementById('officeCount').textContent =
+        `${records.length} locations listed`;
 }
 
-loadOffices();loadDashboard();
+function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function loadOffices(){try{const res=await fetch('/api/offices');if(!res.ok)throw new Error('Could not load offices');const data=await res.json();officeRecords = data.offices || [];renderOffices(officeRecords);}catch(e){document.getElementById('officeGrid').innerHTML='<div class="panel">Office data could not be loaded. Check that the backend server is running.</div>';document.getElementById('officeCount').textContent='Unavailable';}}
+document.getElementById('officeSearch').addEventListener('input',e=>{const q=e.target.value.toLowerCase();renderOffices(officeRecords.filter(o=>`${o.district} ${o.office}`.toLowerCase().includes(q)));});
+async function loadDashboard(){try{const [overviewRes,officesRes]=await Promise.all([fetch('/api/overview'),fetch('/api/offices')]);if(!overviewRes.ok||!officesRes.ok)throw new Error('API unavailable');const overview=await overviewRes.json();const offices=await officesRes.json();const metrics=[['Applications received',overview.applications_received],['Applications processed',overview.applications_processed],['Passports printed',overview.passports_printed],['Passports collected',overview.passports_collected]];document.getElementById('metricGrid').innerHTML=metrics.map(m=>`<div class="metric-card"><span>${m[0]}</span><strong>${Number(m[1]).toLocaleString()}</strong><small>Across the selected reporting period</small></div>`).join('');document.getElementById('officeTable').innerHTML=(offices.offices||[]).map(o=>`<tr><td>${escapeHtml(o.district)}</td><td>${escapeHtml(o.office)}</td><td>${Number(o.applications_received).toLocaleString()}</td><td>${Number(o.passports_printed).toLocaleString()}</td><td>${Number(o.outstanding_backlog).toLocaleString()}</td></tr>`).join('');}catch(e){document.getElementById('metricGrid').innerHTML='<div class="panel">Could not load service metrics. Check the backend server.</div>';document.getElementById('officeTable').innerHTML='<tr><td colspan="5">Office data unavailable.</td></tr>';}}
+let analyticsPayload=null;
+async function loadAnalytics(){
+  try{
+    const response=await fetch('/api/analytics');if(!response.ok)throw new Error('Report unavailable');
+    analyticsPayload=await response.json();
+    const selector=document.getElementById('analyticsPeriod');
+    const render=()=>{
+      const period=selector?.value||'monthly'; let rows=analyticsPayload[period]||[]; if(period==='daily') rows=rows.slice(-30);
+      const received=rows.reduce((s,r)=>s+Number(r.applications_received||0),0);
+      const processed=rows.reduce((s,r)=>s+Number(r.applications_processed||0),0);
+      const printed=rows.reduce((s,r)=>s+Number(r.passports_printed||0),0);
+      const collected=rows.reduce((s,r)=>s+Number(r.passports_collected||0),0);
+      const summary=document.getElementById('analyticsSummary');
+      if(summary)summary.innerHTML=[['Applications received',received],['Applications processed',processed],['Passports printed',printed],['Passports collected',collected]].map(([k,v])=>`<div><small>${k}</small><strong>${Number(v).toLocaleString()}</strong></div>`).join('');
+      const title=document.getElementById('analyticsChartTitle');
+      if(title)title.textContent=`Applications received by ${period==='daily'?'day (last 30 days)':period==='monthly'?'month':'year'}`;
+      const max=Math.max(1,...rows.map(r=>Number(r.applications_received||0)));
+      const chart=document.getElementById('analyticsChart');
+      if(chart)chart.innerHTML=rows.map(r=>`<div class="chart-row"><span>${escapeHtml(r.period)}</span><div class="chart-track"><i style="width:${Math.max(2,Number(r.applications_received||0)/max*100)}%"></i></div><b>${Number(r.applications_received||0).toLocaleString()}</b></div>`).join('');
+      const comp=document.getElementById('passportComparisonChart');
+      const cmax=Math.max(1,printed,collected);
+      if(comp)comp.innerHTML=[['Printed',printed],['Collected',collected]].map(([k,v])=>`<div class="chart-row"><span>${k}</span><div class="chart-track"><i style="width:${v/cmax*100}%"></i></div><b>${Number(v).toLocaleString()}</b></div>`).join('');
+      const table=document.getElementById('analyticsTable');
+      if(table)table.innerHTML=rows.map(r=>`<tr><td>${escapeHtml(r.period)}</td><td>${Number(r.applications_received).toLocaleString()}</td><td>${Number(r.applications_processed).toLocaleString()}</td><td>${Number(r.passports_printed).toLocaleString()}</td><td>${Number(r.passports_collected).toLocaleString()}</td></tr>`).join('');
+    };
+    selector?.addEventListener('change',render);render();
+  }catch(error){const chart=document.getElementById('analyticsChart');if(chart)chart.textContent='Could not load passport activity reports.';}
+}
+async function loadTechnologyInsights(){
+  try{
+    const response=await fetch('/api/technology'); if(!response.ok)throw new Error('Insights unavailable');
+    const data=await response.json();
+    const ai=data.ai||{}, metrics=ai.model_metrics||[];
+    const aiHost=document.getElementById('aiInsightMetrics'), aiChart=document.getElementById('aiModelChart');
+    if(aiHost) aiHost.innerHTML=`<div><small>30-day demand planning estimate</small><strong>${Number(ai.forecast_next_30_days_received||0).toLocaleString()}</strong></div><div><small>Average daily backlog</small><strong>${Number(ai.forecast_daily_backlog_average||0).toLocaleString()}</strong></div>`;
+    if(aiChart) aiChart.innerHTML=metrics.filter(m=>m.Target==='applications_received').map(m=>`<div class="chart-row"><span>${escapeHtml(m.Model)}</span><div class="chart-track"><i style="width:${Math.max(4,Math.min(100,Number(m.R_squared||0)*100))}%"></i></div><b>${(Number(m.R_squared||0)*100).toFixed(1)}% R²</b></div>`).join('')||'Model evaluation is not available.';
+    const chainHost=document.getElementById('blockchainInsightMetrics'), chainChart=document.getElementById('blockchainChart');
+    if(chainHost)chainHost.innerHTML='<div><small>Audit design</small><strong>SHA-256</strong></div><div><small>Record integrity</small><strong>Hash-linked</strong></div>';
+    if(chainChart)chainChart.innerHTML='<div class="chain-flow"><span>Event</span><b>→</b><span>Previous hash</span><b>→</b><span>Event hash</span><b>→</b><span>Next event</span></div>';
+  }catch(error){const ai=document.getElementById('aiModelChart');if(ai)ai.textContent='AI insights are temporarily unavailable.';}
+}
+loadOffices();loadDashboard();loadAnalytics();loadTechnologyInsights();
 
 
 // PASSASSIST public screens and Supabase authentication.
@@ -179,6 +154,15 @@ loadOffices();loadDashboard();
 
   async function enterCitizenPortal(user) {
     if (!user) return;
+    // Security administrators are routed to their own restricted application.
+    // Access is verified by a protected Supabase RPC, not by browser metadata.
+    try {
+      const { error: adminGateError } = await authClient.rpc('passassist_admin_overview');
+      if (!adminGateError) {
+        window.location.replace('/security-admin');
+        return;
+      }
+    } catch (_) { /* Not a security administrator; continue with normal role checks. */ }
     let profile = null;
     const { data, error } = await authClient
       .from('profiles')
@@ -197,12 +181,6 @@ loadOffices();loadDashboard();
     // Officer access is determined by a protected database assignment, never by
     // a browser-supplied role or a public registration field.
     const { data: staffRows, error: staffError } = await authClient.rpc('passassist_get_officer_context');
-    console.log('OFFICER CHECK:', {
-  staffRows,
-  staffError,
-  isArray: Array.isArray(staffRows),
-  userId: user.id
-});
     if (!staffError && Array.isArray(staffRows) && staffRows.length) {
       const staff = staffRows[0];
       document.body.classList.remove('show-citizen-demo');
@@ -226,10 +204,13 @@ loadOffices();loadDashboard();
     setCitizenProfile(user, profile);
     document.body.classList.add('show-citizen-demo');
     loadCitizenApplications();
+    loadCitizenAppointmentRequests();
+    loadChecklistProgress();
+    loadUploadedDocuments();
     window.scrollTo({top:0,behavior:'smooth'});
   }
 
-  const signInForm = document.getElementById('prototypeSignIn');
+  const signInForm = document.getElementById('serviceSignIn');
   signInForm?.addEventListener('submit', async event => {
     event.preventDefault();
     if (!authClient) {
@@ -252,7 +233,7 @@ loadOffices();loadDashboard();
     await enterCitizenPortal(data.user);
   });
 
-  const signUpForm = document.getElementById('prototypeSignUp');
+  const signUpForm = document.getElementById('serviceSignUp');
   signUpForm?.addEventListener('submit', async event => {
     event.preventDefault();
     if (!authClient) {
@@ -266,24 +247,21 @@ loadOffices();loadDashboard();
     const email = document.getElementById('signupEmail').value.trim();
     const phone = document.getElementById('signupPhone').value.trim();
     const password = document.getElementById('signupPassword').value;
-    let data, error;
-    try {
-      ({ data, error } = await authClient.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: fullName, phone } }
-      }));
-    } catch (networkError) {
-      console.error('PASSASSIST registration network failure:', networkError);
-      button.disabled = false;
-      button.innerHTML = 'Create account <span>→</span>';
-      showMessage('signupMessage', 'Could not reach Supabase. Check your internet connection, Supabase Project URL, publishable key, and Supabase project status. Open Chrome DevTools → Network for the exact request error.', true);
-      return;
-    }
+    const { data, error } = await authClient.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName, phone },
+        emailRedirectTo: window.location.origin
+      }
+    });
     button.disabled = false;
     button.innerHTML = 'Create account <span>→</span>';
     if (error) {
-      showMessage('signupMessage', error.message, true);
+      const friendly = /rate limit|email rate/i.test(error.message || '')
+        ? 'Email verification is temporarily rate-limited by the email provider. Do not submit repeatedly. Wait for the limit to reset, or ask the administrator to configure a verified SMTP provider in Supabase Auth.'
+        : error.message;
+      showMessage('signupMessage', friendly, true);
       return;
     }
     if (data.session && data.user) {
@@ -384,9 +362,48 @@ loadOffices();loadDashboard();
     document.getElementById('applicationFormHeading').textContent = 'Prepare a passport application';
     document.getElementById('draftModeLabel').textContent = 'NEW DRAFT';
     document.getElementById('cancelApplicationEdit').hidden = true;
+    ['previousPassportNumber','previousPassportIssueDate','previousPassportExpiryDate','previousPassportPlace','previousPassportFileNumber'].forEach(id=>{const n=document.getElementById(id);if(n)n.value='';});
+    document.getElementById('previousDiplomaticStatus').value='not_available';
+    document.getElementById('previousAppliedNotIssued').value='no';
+    showPreviousPassportSection();
     renderApplicationChecklist([]);
     setApplicationMessage('');
   }
+
+  function readPreviousPassportDetails() {
+    if (document.getElementById('recordType').value !== 'replacement') return {};
+    return {
+      passport_number: document.getElementById('previousPassportNumber').value.trim() || null,
+      date_of_issue: document.getElementById('previousPassportIssueDate').value || null,
+      date_of_expiry: document.getElementById('previousPassportExpiryDate').value || null,
+      place_of_issue: document.getElementById('previousPassportPlace').value.trim() || null,
+      file_number: document.getElementById('previousPassportFileNumber').value.trim() || null,
+      diplomatic_official_status: document.getElementById('previousDiplomaticStatus').value,
+      previously_applied_not_issued: document.getElementById('previousAppliedNotIssued').value
+    };
+  }
+  function showPreviousPassportSection() {
+    const section = document.getElementById('previousPassportSection');
+    if (section) section.hidden = document.getElementById('recordType').value !== 'replacement';
+  }
+  function fillPreviousPassportDetails(details = {}) {
+    const map = {
+      previousPassportNumber: 'passport_number',
+      previousPassportIssueDate: 'date_of_issue',
+      previousPassportExpiryDate: 'date_of_expiry',
+      previousPassportPlace: 'place_of_issue',
+      previousPassportFileNumber: 'file_number',
+      previousDiplomaticStatus: 'diplomatic_official_status',
+      previousAppliedNotIssued: 'previously_applied_not_issued'
+    };
+    Object.entries(map).forEach(([id,key]) => {
+      const node = document.getElementById(id);
+      if (node && details[key] != null) node.value = details[key];
+    });
+    showPreviousPassportSection();
+  }
+  document.getElementById('recordType')?.addEventListener('change', showPreviousPassportSection);
+  showPreviousPassportSection();
 
   function applicationPayload(user) {
     const requirements = getApplicationRequirements();
@@ -405,7 +422,8 @@ loadOffices();loadDashboard();
       applicant_date_of_birth: dob,
       contact_demo: document.getElementById('applicantContact').value.trim() || null,
       checklist_items: checked,
-      checklist_complete: checked.length === requirements.length
+      checklist_complete: checked.length === requirements.length,
+      previous_passport_details: readPreviousPassportDetails()
     };
   }
 
@@ -416,6 +434,96 @@ loadOffices();loadDashboard();
     if (!data.session?.user) throw new Error('Please sign in before continuing.');
     return data.session.user;
   }
+
+  async function loadChecklistProgress() {
+    const status = document.getElementById('checklistSaveStatus');
+    try {
+      const user = await currentCitizen();
+      const category = document.getElementById('applicantAge').value;
+      const type = document.getElementById('applicationType').value;
+      const { data, error } = await authClient.from('citizen_preparation_checklists')
+        .select('checked_items').eq('user_id', user.id)
+        .eq('applicant_category', category).eq('application_type', type).maybeSingle();
+      if (error) throw error;
+      const saved = new Set((data?.checked_items || []).map(Number));
+      document.querySelectorAll('[data-check]').forEach((box,index)=>{box.checked=saved.has(index);});
+      updateProgress();
+      if (status) status.textContent = data ? 'Your saved preparation progress has been restored.' : 'No saved progress for this checklist yet.';
+    } catch (error) {
+      if (status) status.textContent = error.message || 'Sign in to save your preparation progress.';
+    }
+  }
+  async function saveChecklistProgress() {
+    const button = document.getElementById('saveChecks');
+    const status = document.getElementById('checklistSaveStatus');
+    if (button) button.disabled = true;
+    try {
+      const user = await currentCitizen();
+      const checked = [...document.querySelectorAll('[data-check]')].map((box,index)=>box.checked?index:null).filter(v=>v!==null);
+      const payload = {
+        user_id: user.id,
+        applicant_category: document.getElementById('applicantAge').value,
+        application_type: document.getElementById('applicationType').value,
+        checked_items: checked,
+        updated_at: new Date().toISOString()
+      };
+      const { error } = await authClient.from('citizen_preparation_checklists')
+        .upsert(payload,{onConflict:'user_id,applicant_category,application_type'});
+      if (error) throw error;
+      if (status) status.textContent = `Saved: ${checked.length} preparation item(s) checked.`;
+    } catch (error) {
+      if (status) status.textContent = error.message || 'Could not save preparation progress.';
+    } finally { if (button) button.disabled = false; }
+  }
+  async function loadUploadedDocuments() {
+    const host = document.getElementById('uploadedDocuments');
+    if (!host) return;
+    try {
+      const user = await currentCitizen();
+      const { data, error } = await authClient.from('citizen_documents')
+        .select('id,document_type,file_name,file_path,file_size,created_at')
+        .eq('user_id',user.id).order('created_at',{ascending:false});
+      if (error) throw error;
+      if (!data?.length) { host.textContent = 'No documents uploaded yet.'; return; }
+      host.innerHTML = data.map(d=>`<div class="uploaded-document"><span><strong>${escapeHtml(d.file_name)}</strong><small>${escapeHtml(d.document_type.replaceAll('_',' '))} · ${(Number(d.file_size||0)/1024).toFixed(0)} KB</small></span><button type="button" data-document-path="${escapeHtml(d.file_path)}">Open securely</button></div>`).join('');
+    } catch (error) { host.textContent = error.message || 'Sign in to view uploaded documents.'; }
+  }
+  document.getElementById('uploadedDocuments')?.addEventListener('click',async event=>{
+    const button=event.target.closest('[data-document-path]'); if(!button)return;
+    try {
+      const {data,error}=await authClient.storage.from('citizen-documents').createSignedUrl(button.dataset.documentPath,60);
+      if(error)throw error;
+      window.open(data.signedUrl,'_blank','noopener,noreferrer');
+    } catch(error) { const msg=document.getElementById('uploadMessage'); if(msg)msg.textContent=error.message; }
+  });
+  document.getElementById('uploadDocument')?.addEventListener('click',async()=>{
+    const button=document.getElementById('uploadDocument'), fileInput=document.getElementById('documentFile');
+    const msg=document.getElementById('uploadMessage'); const file=fileInput?.files?.[0];
+    if(!file){msg.textContent='Choose a file first.';return;}
+    if(file.size>5*1024*1024){msg.textContent='Each file must be 5 MB or smaller.';return;}
+    if(!['application/pdf','image/jpeg','image/png'].includes(file.type)){msg.textContent='Only PDF, JPG and PNG files are accepted.';return;}
+    button.disabled=true; msg.textContent='Uploading securely…';
+    try {
+      const user=await currentCitizen();
+      const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_').slice(-100);
+      const path=`${user.id}/${crypto.randomUUID()}-${safeName}`;
+      const {error:uploadError}=await authClient.storage.from('citizen-documents').upload(path,file,{contentType:file.type,upsert:false});
+      if(uploadError)throw uploadError;
+      const {error:metaError}=await authClient.from('citizen_documents').insert({
+        user_id:user.id,document_type:document.getElementById('uploadDocumentType').value,
+        file_name:file.name,file_path:path,mime_type:file.type,file_size:file.size
+      });
+      if(metaError){await authClient.storage.from('citizen-documents').remove([path]);throw metaError;}
+      msg.textContent='Document uploaded. It is stored in your private document vault.';
+      fileInput.value=''; await loadUploadedDocuments();
+    } catch(error){msg.textContent=error.message||'Document upload failed.';}
+    finally{button.disabled=false;}
+  });
+  document.getElementById('saveChecks')?.addEventListener('click',saveChecklistProgress);
+  // Keep the persisted checklist in sync when a citizen resets the visible items.
+  document.getElementById('resetChecks')?.addEventListener('click',saveChecklistProgress);
+  document.getElementById('applicantAge')?.addEventListener('change',loadChecklistProgress);
+  document.getElementById('applicationType')?.addEventListener('change',loadChecklistProgress);
 
   async function saveApplicationDraft() {
     const button = document.getElementById('saveApplicationDraft');
@@ -462,11 +570,11 @@ loadOffices();loadDashboard();
           .eq('id', applicationId).eq('applicant_id', user.id).eq('status','draft');
         if (error) throw error;
       }
-      const confirmed = window.confirm('Review complete: submit this demonstration application? You will not be able to edit it after submission.');
+      const confirmed = window.confirm('Review complete: submit this application? You will not be able to edit it after submission.');
       if (!confirmed) return;
       const { data, error } = await authClient.rpc('passassist_submit_application', { p_application_id: applicationId });
       if (error) throw error;
-      setApplicationMessage(`Application submitted in the prototype. Reference: ${data}`);
+      setApplicationMessage(`Application submitted in the service. Reference: ${data}`);
       resetApplicationForm();
       await loadCitizenApplications();
     } catch (error) {
@@ -521,6 +629,7 @@ loadOffices();loadDashboard();
       document.getElementById('applicantTestName').value = data.applicant_full_name || '';
       document.getElementById('applicantTestDob').value = data.applicant_date_of_birth || '';
       document.getElementById('applicantContact').value = data.contact_demo || '';
+      fillPreviousPassportDetails(data.previous_passport_details || {});
       renderApplicationChecklist(data.checklist_items || []);
       document.getElementById('applicationFormHeading').textContent = 'Resume your saved draft';
       document.getElementById('draftModeLabel').textContent = 'EDITING DRAFT';
@@ -533,7 +642,7 @@ loadOffices();loadDashboard();
   }
 
   async function acknowledgeCollection(id) {
-    const confirmed = window.confirm('Confirm that this demonstration passport has been collected?');
+    const confirmed = window.confirm('Confirm that this passport has been collected?');
     if (!confirmed) return;
     try {
       const { error } = await authClient.rpc('passassist_acknowledge_collection', { p_application_id: id });
@@ -633,136 +742,187 @@ loadOffices();loadDashboard();
   document.getElementById('officerProcessForm')?.addEventListener('submit',saveOfficerDecision);
   document.getElementById('closeOfficerProcess')?.addEventListener('click',()=>{document.getElementById('officerProcessPanel').hidden=true;selectedOfficerApplication=null;});
   document.getElementById('officerSignOut')?.addEventListener('click',async()=>{if(!authClient)return;const {error}=await authClient.auth.signOut();if(error){alert('Sign out could not be completed: '+error.message);return;}document.body.classList.remove('show-citizen-demo','show-officer-portal');showPublicView('welcome');});
+// ==========================================
+// STEP 5: CITIZEN APPOINTMENT REQUESTS
+// ==========================================
 
-})();
-async function loadAnalytics() {
-  const periodSelect = document.getElementById('analyticsPeriod');
-  const metricsBox = document.getElementById('analyticsMetrics');
-  const chartBox = document.getElementById('analyticsChart');
-  const chartTitle = document.getElementById('analyticsChartTitle');
-  const tableBody = document.getElementById('analyticsTable');
+async function loadAppointmentOfficeOptions() {
+    const select = document.getElementById('appointmentOffice');
+    if (!select) return;
 
-  if (!periodSelect || !metricsBox || !chartBox || !tableBody) return;
+    try {
+        const response = await fetch('/api/offices');
+        if (!response.ok) throw new Error('Could not load offices.');
 
-  try {
-    const response = await fetch('/api/analytics');
-    if (!response.ok) throw new Error('Analytics could not be loaded.');
+        const result = await response.json();
+        const offices = result.offices || [];
 
-    const data = await response.json();
+        select.innerHTML = '<option value="">Choose an office</option>';
 
-    function renderAnalytics() {
-      const period = periodSelect.value;
-      const records = data[period] || [];
+        offices.forEach(office => {
+            const name = office.office || office.district;
+            if (!name) return;
 
-      if (!records.length) {
-        metricsBox.innerHTML = '<div class="metric-card">No analytics available.</div>';
-        chartBox.textContent = 'No chart data available.';
-        tableBody.innerHTML = '<tr><td colspan="6">No records available.</td></tr>';
-        return;
-      }
-
-      const totals = records.reduce((sum, row) => {
-        Object.keys(row).forEach(key => {
-          if (key !== 'date' && key !== 'index') {
-            sum[key] = (sum[key] || 0) + Number(row[key] || 0);
-          }
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            select.appendChild(option);
         });
-        return sum;
-      }, {});
-
-      metricsBox.innerHTML = [
-        ['Applications received', totals.applications_received],
-        ['Applications processed', totals.applications_processed],
-        ['Passports printed', totals.passports_printed],
-        ['Passports collected', totals.passports_collected]
-      ].map(item => `
-        <div class="metric-card">
-          <span>${item[0]}</span>
-          <strong>${Number(item[1] || 0).toLocaleString()}</strong>
-          <small>Synthetic demonstration data</small>
-        </div>
-      `).join('');
-
-      const labelKey = period === 'daily' ? 'date' :
-                       period === 'monthly' ? 'date' : 'date';
-
-      chartTitle.textContent =
-        period.charAt(0).toUpperCase() + period.slice(1) +
-        ' applications received';
-
-      const maxValue = Math.max(
-        ...records.map(row => Number(row.applications_received || 0)),
-        1
-      );
-
-      chartBox.innerHTML = records.map(row => {
-        const value = Number(row.applications_received || 0);
-        const width = Math.max((value / maxValue) * 100, value > 0 ? 2 : 0);
-
-        return `
-          <div class="analytics-bar-row">
-            <span>${escapeHtml(row[labelKey] || '—')}</span>
-            <div class="analytics-bar-track">
-              <div class="analytics-bar-fill" style="width:${width}%"></div>
-            </div>
-            <strong>${value.toLocaleString()}</strong>
-          </div>
-        `;
-      }).join('');
-
-            const comparisonBox = document.getElementById('passportComparisonChart');
-
-      if (comparisonBox) {
-        const maxPassportValue = Math.max(
-          ...records.map(row => Math.max(
-            Number(row.passports_printed || 0),
-            Number(row.passports_collected || 0)
-          )),
-          1
-        );
-
-        comparisonBox.innerHTML = records.map(row => {
-          const printed = Number(row.passports_printed || 0);
-          const collected = Number(row.passports_collected || 0);
-
-          return `
-            <div class="analytics-bar-row">
-              <span>${escapeHtml(row.date || '—')}</span>
-              <div class="analytics-comparison">
-                <div class="analytics-bar-track">
-                  <div class="analytics-bar-fill" style="width:${printed / maxPassportValue * 100}%"></div>
-                </div>
-                <small>Printed: ${printed.toLocaleString()}</small>
-                <div class="analytics-bar-track">
-                  <div class="analytics-bar-fill collected-fill" style="width:${collected / maxPassportValue * 100}%"></div>
-                </div>
-                <small>Collected: ${collected.toLocaleString()}</small>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      tableBody.innerHTML = records.map(row => `
-        <tr>
-          <td>${escapeHtml(row.date || '—')}</td>
-          <td>${Number(row.applications_received || 0).toLocaleString()}</td>
-          <td>${Number(row.applications_processed || 0).toLocaleString()}</td>
-          <td>${Number(row.applications_approved || 0).toLocaleString()}</td>
-          <td>${Number(row.passports_printed || 0).toLocaleString()}</td>
-          <td>${Number(row.passports_collected || 0).toLocaleString()}</td>
-        </tr>
-      `).join('');
+    } catch (error) {
+        select.innerHTML = '<option value="">Office list unavailable</option>';
     }
-
-    periodSelect.addEventListener('change', renderAnalytics);
-    renderAnalytics();
-
-  } catch (error) {
-    metricsBox.textContent = 'Analytics unavailable.';
-    chartBox.textContent = error.message;
-    tableBody.innerHTML = '<tr><td colspan="6">Could not load analytics.</td></tr>';
-  }
 }
 
-loadAnalytics();
+function setAppointmentMessage(message, isError = false) {
+    const element = document.getElementById('appointmentRequestMessage');
+    if (!element) return;
+
+    element.textContent = message;
+    element.classList.toggle('error', isError);
+}
+
+async function loadCitizenAppointmentRequests() {
+    const tbody = document.getElementById('appointmentRequestsTable');
+    if (!tbody || !authClient) return;
+
+    try {
+        const user = await currentCitizen();
+
+        tbody.innerHTML =
+            '<tr><td colspan="6">Loading your requests...</td></tr>';
+
+        const { data, error } = await authClient
+            .from('appointment_requests')
+            .select('id, office_name, requested_date, requested_time, reason, status, created_at')
+            .eq('applicant_id', user.id)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            tbody.innerHTML =
+                '<tr><td colspan="6">You have not submitted any appointment requests.</td></tr>';
+            return;
+        }
+
+        const labels = {
+            pending: 'Pending review',
+            under_review: 'Under review',
+            approved_for_followup: 'Approved for follow-up — not confirmed',
+            declined: 'Declined',
+            change_requested: 'Change requested',
+            cancelled: 'Cancelled'
+        };
+
+        tbody.innerHTML = data.map(request => {
+            const date = new Date(
+                request.requested_date + 'T00:00:00'
+            ).toLocaleDateString();
+
+            const time = String(request.requested_time).slice(0, 5);
+
+            const submitted = new Date(
+                request.created_at
+            ).toLocaleDateString();
+
+            return `
+                <tr>
+                    <td>${escapeHtml(request.office_name)}</td>
+                    <td>${escapeHtml(date)}</td>
+                    <td>${escapeHtml(time)}</td>
+                    <td>${escapeHtml(request.reason)}</td>
+                    <td>${escapeHtml(labels[request.status] || request.status)}</td>
+                    <td>${escapeHtml(submitted)}</td>
+                </tr>
+            `;
+        }).join('');
+
+    } catch (error) {
+        tbody.innerHTML =
+            `<tr><td colspan="6">${escapeHtml(error.message || 'Could not load requests.')}</td></tr>`;
+    }
+}
+
+async function submitCitizenAppointmentRequest(event) {
+    event.preventDefault();
+
+    const button = document.getElementById('submitAppointmentRequest');
+    button.disabled = true;
+    button.textContent = 'Submitting request...';
+
+    try {
+        const user = await currentCitizen();
+
+        const office = document.getElementById('appointmentOffice').value;
+        const date = document.getElementById('appointmentDate').value;
+        const time = document.getElementById('appointmentTime').value;
+        const reason = document.getElementById('appointmentReason').value;
+
+        if (!office || !date || !time || !reason) {
+            throw new Error('Please complete all appointment fields.');
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const selectedDate = new Date(date + 'T00:00:00');
+
+        if (selectedDate < today) {
+            throw new Error('Please select today or a future date.');
+        }
+
+        const { error } = await authClient
+            .from('appointment_requests')
+            .insert({
+                applicant_id: user.id,
+                office_name: office,
+                requested_date: date,
+                requested_time: time,
+                reason: reason,
+                status: 'pending'
+            });
+
+        if (error) throw error;
+
+        setAppointmentMessage(
+            'Your request was submitted successfully. Status: Pending review. This is not an official appointment confirmation.'
+        );
+
+        document.getElementById('appointmentRequestForm').reset();
+
+        await loadCitizenAppointmentRequests();
+
+    } catch (error) {
+        setAppointmentMessage(
+            error.message || 'Could not submit your request.',
+            true
+        );
+    } finally {
+        button.disabled = false;
+        button.textContent = 'Submit appointment request';
+    }
+}
+
+// Load available offices and set the earliest selectable date.
+loadAppointmentOfficeOptions();
+
+const appointmentDateInput =
+    document.getElementById('appointmentDate');
+
+if (appointmentDateInput) {
+    const now = new Date();
+    const localDate = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, '0'),
+        String(now.getDate()).padStart(2, '0')
+    ].join('-');
+
+    appointmentDateInput.min = localDate;
+}
+
+document.getElementById('appointmentRequestForm')
+    ?.addEventListener('submit', submitCitizenAppointmentRequest);
+
+document.getElementById('refreshAppointmentRequests')
+    ?.addEventListener('click', loadCitizenAppointmentRequests);
+})();

@@ -110,3 +110,18 @@ Not yet completed:
 - production hosting, privacy review, backup and security testing.
 
 Those are addressed in later phases. The current application data dashboard still uses the synthetic coursework CSV until Phase 3/5 connects real authorised records.
+
+
+## Refinement setup — private documents and saved checklists
+
+Run `database/refinement_migration.sql` once in the existing Supabase SQL Editor. It creates:
+- `citizen_preparation_checklists` with owner-only RLS;
+- `citizen_documents` metadata with owner-only RLS;
+- a private `citizen-documents` Storage bucket with owner-folder policies;
+- `applications.previous_passport_details` for replacement passport fields.
+
+Do not make the storage bucket public. The browser uses the publishable/anon key; RLS and Storage policies enforce ownership.
+
+## Email verification and rate limits
+
+Supabase's built-in email service has sending limits. A frontend code change cannot bypass those provider limits. For reliable account verification, configure a verified SMTP provider under Authentication → SMTP Settings, then add the deployed site URL under Authentication → URL Configuration. Use existing test accounts for sign-in tests and avoid repeated sign-up attempts when the service reports a rate limit.

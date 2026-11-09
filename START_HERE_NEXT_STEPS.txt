@@ -1,18 +1,22 @@
-PASSASSIST NATIONAL – START HERE
+PASSASSIST NATIONAL — REFINED PACKAGE
 
-1. Back up your current project folder.
-2. Extract this ZIP to a NEW folder; do not overwrite your working folder yet.
-3. Open the extracted project folder in VS Code.
-4. Your existing Supabase browser configuration is preserved in frontend/supabase-config.js.
-5. Create/activate a Python virtual environment and install requirements.txt if needed.
-6. Start: uvicorn backend.main:app --reload
-7. Open http://127.0.0.1:8000/
-8. Sign in using your existing test accounts. Inside the portal, open Security administration to see the embedded restricted workspace.
-9. Read STAGE_ROADMAP_AND_CAPABILITIES.md. We will review and apply the correct database migrations together.
+Start with:
+1. README.md
+2. REFINEMENT_DEPLOYMENT_STEPS.md
+3. PHASE2_SETUP.md
 
-IMPORTANT
-- Coursework/proposal demonstration, not a production government system. Use fictional test identities only.
-- Never add a service_role key to frontend files.
-- Coat-of-arms image is referenced from Wikimedia Commons and needs internet access. Replace with an approved local asset if necessary.
-- Existing Supabase schema is not automatically changed.
-- Future-stage capabilities are documented as planned integrations, not live features.
+One-time Supabase change:
+Run database/refinement_migration.sql once in the existing Supabase SQL Editor.
+
+Local run:
+pip install -r requirements.txt
+python ai/train_models.py
+python -m uvicorn backend.main:app --reload
+
+Open:
+http://127.0.0.1:8000
+
+Separate security administration:
+http://127.0.0.1:8000/security-admin
+
+The package includes citizen checklist persistence, private document uploads, previous-passport replacement fields, AI reporting, hash-linked audit views and a reduced 90-day planning dataset.

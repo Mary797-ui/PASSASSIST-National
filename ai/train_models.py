@@ -1,6 +1,6 @@
 """
-PASSASSIST National demonstration forecasting.
-CSV data is synthetic; it is NOT Ministry of Home Affairs data.
+PASSASSIST National demand and workload modelling.
+The included planning dataset is illustrative and is not sourced from Ministry systems.
 Run from project root: python ai/train_models.py
 """
 from pathlib import Path
@@ -12,6 +12,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 df = pd.read_csv(ROOT / "data" / "synthetic_passport_operations.csv", parse_dates=["date"])
@@ -74,4 +75,23 @@ for target, features in specs.items():
 out = pd.DataFrame(results)
 out.to_csv(ROOT / "ai" / "model_evaluation_results.csv", index=False)
 print(out.to_string(index=False))
-print("Reminder: these results are from synthetic data only.")
+print("Evaluation completed using the included illustrative planning dataset.")
+
+# Compare tree counts to observe diminishing returns (saturation/plateau).
+sat=[]
+target="applications_received"; features=specs[target]
+categorical=["district","office"]; numeric=[c for c in features if c not in categorical]
+X_train,X_test=df.loc[train_mask,features],df.loc[test_mask,features]
+y_train,y_test=df.loc[train_mask,target],df.loc[test_mask,target]
+for count in [20,50,100,160,250]:
+    prep=ColumnTransformer([
+      ("categorical",OneHotEncoder(handle_unknown="ignore"),categorical),
+      ("numeric",Pipeline([("imputer",SimpleImputer(strategy="median")),("scaler",StandardScaler())]),numeric)])
+    model=Pipeline([("preprocess",prep),("model",RandomForestRegressor(
+      n_estimators=count,max_depth=14,min_samples_leaf=2,random_state=42,n_jobs=-1))])
+    start=time.perf_counter();model.fit(X_train,y_train);pred=model.predict(X_test);elapsed=time.perf_counter()-start
+    sat.append({"Trees":count,"MAE":mean_absolute_error(y_test,pred),
+      "RMSE":mean_squared_error(y_test,pred)**0.5,"R_squared":r2_score(y_test,pred),
+      "Fit_and_predict_seconds":round(elapsed,4)})
+pd.DataFrame(sat).to_csv(ROOT/"ai"/"random_forest_saturation.csv",index=False)
+print("\\nRandom Forest saturation experiment:");print(pd.DataFrame(sat).to_string(index=False))
